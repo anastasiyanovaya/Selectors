@@ -4,43 +4,41 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import java.util.List;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+class ChromeTest {
 
-public class Card {
-
-    private WebDriver driver;
+    WebDriver driver;
 
     @BeforeAll
-    static void SetUpAll() {
-        System.setProperty("webdriver.chrome.driver", "driver/win/chromedriver.exe");
+    static void setupAll() {
+        WebDriverManager.chromedriver().setup();
     }
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         driver = new ChromeDriver();
     }
 
     @AfterEach
-    void tearsDown() {
+    void teardown() {
         driver.quit();
-        driver = null;
     }
 
     @Test
     void cardTest() {
         driver.get("http://localhost:9999");
-        List<WebElement> elements = driver.findElements(By.className("input__control"));
-        elements.get(0).sendKeys("Иванов Иван");
-        elements.get(1).sendKeys("+79171111111");
+        driver.findElements(By.className("input__control"));
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Иван Петров-Иванов");
+        driver.findElement(By.cssSelector("[type=\"tel\"]")).sendKeys("+79171111111");
         driver.findElement(By.className("checkbox")).click();
         driver.findElement(By.className("button")).click();
-        String text = driver.findElement(By.className("paragraph")).getText();
+        String text = driver.findElement(By.cssSelector("[data-test-id=\"order-success\"]")).getText();
         assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.", text.trim());
     }
 
