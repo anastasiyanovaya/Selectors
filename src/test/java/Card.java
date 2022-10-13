@@ -15,10 +15,6 @@ class ChromeTest {
 
     WebDriver driver;
 
-    @BeforeAll
-    static void setupAll() {
-        WebDriverManager.chromedriver().setup();
-    }
     @BeforeEach
     public void setUp() {
         ChromeOptions options = new ChromeOptions();
@@ -26,7 +22,14 @@ class ChromeTest {
         options.addArguments("--no-sandbox");
         options.addArguments("--headless");
         driver = new ChromeDriver(options);
+
     }
+
+    @BeforeAll
+    static void setupAll() {
+        WebDriverManager.chromedriver().setup();
+    }
+
 
     @BeforeEach
     void setup() {
